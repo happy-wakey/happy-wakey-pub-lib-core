@@ -1,0 +1,20 @@
+[package]
+name = "happy-wakey-pub-lib-core"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+description = "Public, client-safe Happy Wakey briefing policy"
+license = "MIT"
+repository = "https://github.com/happy-wakey/happy-wakey-pub-lib-core"
+
+[dependencies]
+happy-wakey-interfaces = { git = "https://github.com/happy-wakey/happy-wakey-interfaces.git", rev = "35b25d5b49cfd469d633914993450c62f25b36b8" }
+time = { version = "=0.3.44", features = ["parsing"] }
+url = "=2.5.4"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = "deny"
+pedantic = "deny"
