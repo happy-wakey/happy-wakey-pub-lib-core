@@ -1,0 +1,24 @@
+[package]
+org = "happy-wakey"
+name = "happy-wakey-pub-lib-core"
+version = "0.1.0"
+description = "Public, deterministic Happy Wakey briefing policy"
+license = "MIT"
+keywords = ["briefing", "deeplink", "policy", "rust"]
+
+[package.repository]
+vcs = "git"
+url = "https://github.com/happy-wakey/happy-wakey-pub-lib-core"
+
+[publish]
+include_readme = true
+tag_format = "v{version}"
+exclude = [".env", ".env.*", "target/**", "tmp/**", "**/*.log", ".DS_Store"]
+smoke_test = "cargo test --manifest-path \"$ZED_PKG_TEST_TARGET/Cargo.toml\" --locked"
+
+[targets.repository]
+dir = "."
+adapter = "rust"
+
+[scripts]
+test = "cargo fmt --all -- --check && cargo clippy --all-targets --locked -- -D warnings && cargo test --all-targets --locked"
