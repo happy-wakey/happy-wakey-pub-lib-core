@@ -10,7 +10,7 @@ repository = "https://github.com/happy-wakey/happy-wakey-pub-lib-core"
 [dependencies]
 happy-wakey-interfaces = { git = "https://github.com/happy-wakey/happy-wakey-interfaces.git", rev = "35b25d5b49cfd469d633914993450c62f25b36b8" }
 time = { version = "=0.3.54", features = ["parsing"] }
-url = "=2.5.7"
+url = "=2.5.8"
 
 [lints.rust]
 unsafe_code = "forbid"
