@@ -21,6 +21,7 @@ pub enum DeepLinkDenial {
     BelowThreshold,
     InconsistentDecision,
     FeedFallbackRequested,
+    ReauthenticationRequired,
     InvalidExpiry,
     Expired,
     InvalidUrl,
@@ -72,6 +73,10 @@ pub fn authorize_deep_link(
     }
     if link.feed_fallback_allowed {
         return Err(DeepLinkDenial::FeedFallbackRequested);
+    }
+    // Consent to open one message is not a reusable provider session.
+    if !link.requires_reauthentication {
+        return Err(DeepLinkDenial::ReauthenticationRequired);
     }
     let expiry = OffsetDateTime::parse(&link.expires_at, &Rfc3339)
         .map_err(|_| DeepLinkDenial::InvalidExpiry)?;
@@ -228,6 +233,18 @@ mod tests {
 
     fn now() -> OffsetDateTime {
         OffsetDateTime::parse("2026-09-05T12:00:00Z", &Rfc3339).expect("valid time")
+    }
+
+    #[test]
+    fn deep_links_must_require_reauthentication() {
+        let mut card = useful_card();
+        card.deep_link.as_mut().unwrap().requires_reauthentication = false;
+        assert_eq!(
+            authorize_deep_link(&card, now()),
+            Err(DeepLinkDenial::ReauthenticationRequired)
+        );
+        let sanitized = strip_unauthorized_deep_links(vec![card], now());
+        assert!(sanitized[0].deep_link.is_none());
     }
 
     fn useful_card() -> BriefingCard {
